@@ -1,0 +1,14 @@
+# Install all required packages
+# Install all required packages for HTTPS development
+pip install Django
+pip install djangorestframework
+pip install djangorestframework-simplejwt
+pip install django-extensions
+pip install django-cors-headers
+pip install Werkzeug
+pip install pyOpenSSL
+pip install django-redis
+
+
+#server running script
+#python manage.py runserver_plus --cert-file ssl_keys/localhost+2.pem --key-file ssl_keys/localhost+2-key.pem

@@ -15,6 +15,10 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+     # If runsslserver is in the arguments, print a clean HTTPS URL
+    if "runsslserver" in sys.argv:
+        print("Your Django HTTPS server is running at: https://127.0.0.1:8000\n")
+
     execute_from_command_line(sys.argv)
 
 

@@ -6,6 +6,8 @@ from .models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
+from django.core.cache import cache
+
 
 class LogoutView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
@@ -32,6 +34,7 @@ class SignupView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
+
 class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
@@ -76,4 +79,12 @@ class HomeView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        return Response({'message': f'Welcome to the home page, {request.user.username}!'})
+         user_id = request.user.id
+         cache_key = f"user_home:{user_id}"
+         data = cache.get(cache_key)
+
+         if not data:
+            data = {'message': f'Welcome to the home page, {request.user.username}!'}
+            cache.set(cache_key, data, timeout=300)  # cache for 5 minutes
+
+         return Response({'message': f'Welcome to the home page, {request.user.username}!'})
